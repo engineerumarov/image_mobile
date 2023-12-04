@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import io.soft.imagenee.presentation.login.AuthorizeScreen
+import io.soft.imagenee.presentation.main.MainScreen
 import io.soft.imagenee.presentation.welcome.WelcomeScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -15,7 +16,7 @@ fun ImageneeNavHost(navHostController: NavHostController) {
 
     NavHost(
         navController = navHostController,
-        startDestination = Destinations.welcome // start destination
+        startDestination = Destinations.main // start destination
     ) {
         composable(route = Destinations.welcome) {
             WelcomeScreen(
@@ -45,7 +46,11 @@ fun ImageneeNavHost(navHostController: NavHostController) {
         }
 
         composable(route = Destinations.main) {
-
+            MainScreen(
+                onOpenImage = {
+                    // navigate to SingleView screen
+                }
+            )
         }
     }
 }

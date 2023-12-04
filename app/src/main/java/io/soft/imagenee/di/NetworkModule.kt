@@ -19,7 +19,7 @@ object NetworkModule {
             Timber.d(it)
         }
         interceptor.level = if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor.Level.BASIC
+            HttpLoggingInterceptor.Level.BODY
         } else {
             HttpLoggingInterceptor.Level.NONE
         }
