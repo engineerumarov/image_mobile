@@ -4,9 +4,9 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface AuthorizeApi {
-    @POST("login")
+    @POST("api/login")
     suspend fun login(@Body loginRequest: LoginRequest)
 
-    @POST("signup")
+    @POST("api/signup")
     suspend fun signup(@Body signupRequest: SignupRequest)
 }

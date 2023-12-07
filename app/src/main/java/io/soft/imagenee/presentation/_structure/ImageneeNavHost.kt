@@ -3,20 +3,23 @@ package io.soft.imagenee.presentation._structure
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import io.soft.imagenee.presentation.login.AuthorizeScreen
 import io.soft.imagenee.presentation.main.MainScreen
+import io.soft.imagenee.presentation.main.single.ShowImageScreen
 import io.soft.imagenee.presentation.welcome.WelcomeScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ImageneeNavHost(navHostController: NavHostController) {
-    val startDestination = "" // if (isUserSignedIn) main else welcome
+fun ImageneeNavHost(navHostController: NavHostController, onBoarding: Boolean) {
+    val startDestination = if (onBoarding) Destinations.welcome else Destinations.main
 
     NavHost(
         navController = navHostController,
-        startDestination = Destinations.main // start destination
+        startDestination = startDestination
     ) {
         composable(route = Destinations.welcome) {
             WelcomeScreen(
@@ -30,7 +33,12 @@ fun ImageneeNavHost(navHostController: NavHostController) {
                 onBack = navHostController::popBackStack,
                 isSignIn = true,
                 onAuthorizeSuccess = {
-                    navHostController.navigate(Destinations.main)
+                    navHostController.navigate(Destinations.main) {
+                        popUpTo(Destinations.main) {
+                            inclusive = true
+                            saveState = false
+                        }
+                    }
                 }
             )
         }
@@ -48,8 +56,32 @@ fun ImageneeNavHost(navHostController: NavHostController) {
         composable(route = Destinations.main) {
             MainScreen(
                 onOpenImage = {
-                    // navigate to SingleView screen
+                    navHostController.navigate("${Destinations.show_image}/" + it.id + "/" + it.name + "/" + it.image)
+                },
+                onLogOut = {
+                    navHostController.navigate(Destinations.welcome) {
+                        popUpTo(Destinations.welcome) {
+                            inclusive = true
+                            saveState = false
+                        }
+                    }
                 }
+            )
+        }
+
+        composable(
+            route = "${Destinations.show_image}/{id}/{name}/{image}",
+            arguments = listOf(
+                navArgument("id") { type = NavType.StringType },
+                navArgument("name") { type = NavType.StringType },
+                navArgument("image") { type = NavType.StringType }
+            )
+        ) { backStack ->
+            ShowImageScreen(
+                imageId = backStack.arguments?.getString("id", "") ?: "",
+                imageName = backStack.arguments?.getString("name", "") ?: "",
+                imagePath = backStack.arguments?.getString("image", "") ?: "",
+                onBack = navHostController::popBackStack
             )
         }
     }

@@ -24,11 +24,11 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "BASE_URL", "\"https://imageene-backend.up.railway.app/\""
+            buildConfigField "String", "BASE_URL", "\"https://imageene-backend.onrender.com/\""
             minifyEnabled false
         }
         release {
-            buildConfigField "String", "BASE_URL", "\"https://imageene-backend.up.railway.app/\""
+            buildConfigField "String", "BASE_URL", "\"https://imageene-backend.onrender.com/\""
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -93,4 +93,10 @@ dependencies {
 
     //---Coil---//
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+    //---Datastore---//
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    //---Splash---//
+    implementation 'androidx.core:core-splashscreen:1.1.0-alpha02'
 }

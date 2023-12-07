@@ -14,7 +14,9 @@ import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ImageneeApp() {
+fun ImageneeApp(
+    onBoarding: Boolean
+) {
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -26,7 +28,7 @@ fun ImageneeApp() {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            ImageneeNavHost(navController)
+            ImageneeNavHost(navController, onBoarding)
         }
     }
 }

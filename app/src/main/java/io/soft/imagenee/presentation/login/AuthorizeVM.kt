@@ -3,6 +3,7 @@ package io.soft.imagenee.presentation.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.soft.imagenee.data.local.LocalStorage
 import io.soft.imagenee.data.network.authorize.LoginRequest
 import io.soft.imagenee.data.network.authorize.SignupRequest
 import io.soft.imagenee.data.repository.AuthorizeRepository
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthorizeVM @Inject constructor(
-    private val repository: AuthorizeRepository
+    private val repository: AuthorizeRepository,
+    private val localStorage: LocalStorage
 ) : ViewModel() {
     private val _effect = MutableSharedFlow<Effect>()
     val effect = _effect.asSharedFlow()
@@ -32,7 +34,10 @@ class AuthorizeVM @Inject constructor(
         viewModelScope.launch {
             repository
                 .login(LoginRequest(email, password))
-                .onSuccess { _effect.emit(Effect.AuthorizeSuccess) }
+                .onSuccess {
+                    localStorage.put(email)
+                    _effect.emit(Effect.AuthorizeSuccess)
+                }
                 .onFailure { _effect.emit(Effect.Error(it.message ?: "Unknown Error")) }
         }
         _loading.update { false }
@@ -60,7 +65,10 @@ class AuthorizeVM @Inject constructor(
         viewModelScope.launch {
             repository
                 .signup(SignupRequest(name, surname, email, password))
-                .onSuccess { _effect.emit(Effect.AuthorizeSuccess) }
+                .onSuccess {
+                    localStorage.put(email)
+                    _effect.emit(Effect.AuthorizeSuccess)
+                }
                 .onFailure { _effect.emit(Effect.Error(it.message ?: "Unknown error")) }
         }
         _loading.update { false }

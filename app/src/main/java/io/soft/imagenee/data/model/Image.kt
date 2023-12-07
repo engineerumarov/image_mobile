@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Image(
     val name: String,
-    val path: String,
+    val image: String,
     val userId: String,
     @SerializedName("_id")
     val id: String,

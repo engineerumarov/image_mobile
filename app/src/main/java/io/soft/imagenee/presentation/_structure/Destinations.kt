@@ -6,4 +6,5 @@ object Destinations {
     const val signup = "signup"
 
     const val main = "main"
+    const val show_image = "show_image"
 }
